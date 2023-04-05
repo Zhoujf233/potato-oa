@@ -11,10 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -69,13 +66,49 @@ public class SysRoleController {
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
         String roleName = sysRoleQueryVo.getRoleName();
         if (!StringUtils.isEmpty(roleName)){
-            //封装
+            //封装 like模糊查询
             wrapper.like(SysRole::getRoleName,roleName);
         }
 
         //3 调用方法实现
         IPage<SysRole> pageModel = sysRoleService.page(pageParam, wrapper);
         return Result.ok(pageModel);
-        
     }
+
+    //添加角色
+    @ApiOperation("添加角色")
+    @PostMapping("save")
+    public Result save(@RequestBody SysRole sysRole){
+        //调用service方法
+        boolean is_success = sysRoleService.save(sysRole);
+        if (is_success){
+            return Result.ok();
+        }
+        else {
+            return Result.fail();
+        }
+    }
+
+    //修改角色-根据id查询
+    @ApiOperation("根据id查询")
+    @GetMapping("get/{id}")
+    public Result get(@PathVariable Long id) {
+        SysRole sysRole = sysRoleService.getById(id);
+        return Result.ok(sysRole);
+
+    }
+    //修改角色-最终修改
+    @ApiOperation("修改角色")
+    @PostMapping("update")
+    public Result update(@RequestBody SysRole sysRole){
+        //调用service方法
+        boolean is_success = sysRoleService.updateById(sysRole);
+        if (is_success){
+            return Result.ok();
+        }
+        else {
+            return Result.fail();
+        }
+    }
+
 }
