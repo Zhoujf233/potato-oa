@@ -99,7 +99,7 @@ public class SysRoleController {
     }
     //修改角色-最终修改
     @ApiOperation("修改角色")
-    @PostMapping("update")
+    @PutMapping("update")
     public Result update(@RequestBody SysRole sysRole){
         //调用service方法
         boolean is_success = sysRoleService.updateById(sysRole);
@@ -111,4 +111,30 @@ public class SysRoleController {
         }
     }
 
+    //根据id删除
+    @ApiOperation("根据id删除")
+    @DeleteMapping("remove/{id}")
+    public Result remove(@PathVariable Long id){
+        boolean is_success = sysRoleService.removeById(id);
+        if (is_success){
+            return Result.ok();
+        }
+        else {
+            return Result.fail();
+        }
+    }
+
+    //批量删除
+    //前端数组 [1,2,3]
+    @ApiOperation("批量删除")
+    @DeleteMapping("batchRemove")
+    public Result batchRemove(@RequestBody List<Long> idList){
+        boolean is_success = sysRoleService.removeByIds(idList);
+        if (is_success){
+            return Result.ok();
+        }
+        else {
+            return Result.fail();
+        }
+    }
 }
