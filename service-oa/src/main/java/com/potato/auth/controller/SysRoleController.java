@@ -76,5 +76,6 @@ public class SysRoleController {
         //3 调用方法实现
         IPage<SysRole> pageModel = sysRoleService.page(pageParam, wrapper);
         return Result.ok(pageModel);
+        
     }
 }
