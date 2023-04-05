@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * ClassName: SysRoleController
@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Api(tags = "角色管理接口")
 @RestController
-@RequestMapping("/admin/system/sysRole")
+@RequestMapping("/admin/system/sysRole/")
 public class SysRoleController {
 
     //注入Service
@@ -42,11 +42,22 @@ public class SysRoleController {
 
     //统一返回数据结果
     @ApiOperation("查询所有角色")
-    @GetMapping("/findAll")
+    @GetMapping("findAll")
     public Result findAll(){
         //调用service方法
         List<SysRole> list = sysRoleService.list();
-        return Result.ok(list);
+
+        List<HashMap<String,Object>> l = new ArrayList<>();
+        for (int i=0; i < list.size(); i++) {
+            SysRole sr = list.get(i);
+            HashMap<String,Object> item = new HashMap<>();
+            item.put("roleName", sr.getRoleName());
+            l.add(item);
+        }
+        //模拟异常效果
+        // int i = 10/0;
+
+        return Result.ok(l);
     }
 
     //条件分页查询
@@ -137,4 +148,9 @@ public class SysRoleController {
             return Result.fail();
         }
     }
+
+    // public static void main(String[] args) {
+    //     SysRoleController c = new SysRoleController();
+    //     c.findAll();
+    // }
 }
